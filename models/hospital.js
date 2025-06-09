@@ -38,5 +38,5 @@ const hospitalschema = new mongoose.hospitalschema({
         required:true,
         match:/^[0-9]{10}$/
     }
-});
+},{ timestamps: tue});
 module.exports = mongoose.model('HospitalUser',hospitalschema);
