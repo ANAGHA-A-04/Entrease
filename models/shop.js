@@ -6,4 +6,4 @@ const shopSchema= new mongoose.Schema({
 }
 },
 {timestamps:true});
-module.exports=mongoose.model('Shop',shopSchema);
+module.exports=mongoose.model('Shop',shopSchema,"shop");

@@ -39,4 +39,4 @@ const hospitalschema = new mongoose.hospitalschema({
         match:/^[0-9]{10}$/
     }
 },{ timestamps: tue});
-module.exports = mongoose.model('HospitalUser',hospitalschema);
+module.exports = mongoose.model('HospitalUser',hospitalschema,"hospital");
