@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const hospitalschema = new mongoose.hospitalschema({
+const hospitalschema = new mongoose.Schema({
     name:{
         type:String,
         required:true
