@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 
+const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/formrouter');
 const adminRoutes = require('./routes/adminroutes');
@@ -10,12 +11,7 @@ const superadminRoutes = require('./routes/superadmin');
 
 const app = express();
 app.use(express.json());
-
-mongoose.connect(process.env.DATA, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log('MongoDB Connected'))
-  .catch((err) => console.error('MongoDB Error', err));
+connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
