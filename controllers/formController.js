@@ -1,4 +1,4 @@
-const hospital = require('../models/hospital');
+
 const hospitalvisitor = require('../models/hospital');
 const schoolvisitor=require('../models/school');
 const shopvisitor=require('../models/shop');
