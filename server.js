@@ -3,6 +3,6 @@ const app=express();
 app.get('/',(req,res)=>{
     res.send("Hello !");
 });
-app.listen(3001,()=>{
+app.listen(process.env.PORT||3001,()=>{
     console.log("server connected");
 });
