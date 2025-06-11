@@ -15,7 +15,7 @@ exports.userSignup = async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
     const user = new User({ username, email, password: hash });
     await user.save();
-    res.status(201).json({ msg: 'User registered successfully' });
+    res.status(201).json({user, msg: 'User registered successfully' });
   } catch (err) {
     res.status(500).json({ msg: 'User registration failed' });
   }
