@@ -1,81 +1,123 @@
 const HospitalUser = require('../models/hospital');
-const student = require('../models/school');
+const Student = require('../models/school');
 const Shop = require('../models/shop');
+const DailyVisitors = require('../models/dailyVisiter');
 
-// Hospital visitor list display 
+const getTodayDate = () => new Date().toISOString().split('T')[0];
+
+const generateOrFetchFixedVisitors = async ({ model, adminId, type }) => {
+  const today = getTodayDate();
+
+  // Check if already stored for this admin, type, and date
+  let todayEntry = await DailyVisitors.findOne({ adminId, date: today, type });
+
+  if (!todayEntry) {
+    // Get total documents for fallback
+    const total = await model.countDocuments();
+    const sampleSize = Math.min(5, total);
+
+    const randomVisitors = await model.aggregate([{ $sample: { size: sampleSize } }]);
+
+    todayEntry = new DailyVisitors({
+      adminId,
+      date: today,
+      type,
+      visitors: randomVisitors
+    });
+
+    await todayEntry.save();
+  }
+
+  return todayEntry;
+};
+
+const searchFilter = (search, visitors) => {
+  if (!search) return visitors;
+
+  return visitors.filter(visitor =>
+    ['name', 'email', 'phoneNumber'].some(key =>
+      visitor[key]?.toLowerCase().includes(search.toLowerCase())
+    )
+  );
+};
+
+// ============================
+// Hospital Visitors
+// ============================
 exports.getHospitalVisitors = async (req, res) => {
-  const { adminId, date, name } = req.query;
-
-  const filter = { adminId };
-
-  if (name) {
-    filter.name = { $regex: name, $options: 'i' }; 
-  }
-
-  if (date) {
-    filter.createdAt = {
-      $gte: new Date(date + "T00:00:00.000Z"),
-      $lte: new Date(date + "T23:59:59.999Z")
-    };
-  }
+  const { adminId, search } = req.query;
 
   try {
-    const visitors = await HospitalUser.find(filter).sort({ createdAt: -1 });
-    res.json(visitors);
+    await generateOrFetchFixedVisitors({
+      model: HospitalUser,
+      adminId,
+      type: 'hospital'
+    });
+
+    const all = await DailyVisitors.find({ adminId, type: 'hospital' }).sort({ date: -1 });
+
+    const filtered = all.map(entry => ({
+      date: entry.date,
+      visitors: searchFilter(search, entry.visitors)
+    }));
+
+    res.json({ results: filtered });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Error fetching hospital visitors' });
   }
 };
-//school visitors display
+
+// ============================
+// School Visitors
+// ============================
 exports.getSchoolVisitors = async (req, res) => {
-  const { adminId, date, name } = req.query;
-
-  const filter = { adminId };
-
-  if (name) {
-    filter.name = { $regex: name, $options: 'i' };
-  }
-
-  if (date) {
-    filter.createdAt = {
-      $gte: new Date(date + "T00:00:00.000Z"),
-      $lte: new Date(date + "T23:59:59.999Z")
-    };
-  }
+  const { adminId, search } = req.query;
 
   try {
-    const visitors = await student.find(filter).sort({ createdAt: -1 });
-    res.json(visitors);
+    await generateOrFetchFixedVisitors({
+      model: Student,
+      adminId,
+      type: 'school'
+    });
+
+    const all = await DailyVisitors.find({ adminId, type: 'school' }).sort({ date: -1 });
+
+    const filtered = all.map(entry => ({
+      date: entry.date,
+      visitors: searchFilter(search, entry.visitors)
+    }));
+
+    res.json({ results: filtered });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Error fetching school visitors' });
   }
 };
-//shop visitors display
 
+// ============================
+// Shop Visitors
+// ============================
 exports.getShopVisitors = async (req, res) => {
-  const { adminId, date, name } = req.query;
-
-  const filter = { adminId };
-
-  if (name) {
-    filter.name = { $regex: name, $options: 'i' };
-  }
-
-  if (date) {
-    filter.createdAt = {
-      $gte: new Date(date + "T00:00:00.000Z"),
-      $lte: new Date(date + "T23:59:59.999Z")
-    };
-  }
+  const { adminId, search } = req.query;
 
   try {
-    const visitors = await Shop.find(filter).sort({ createdAt: -1 });
-    res.json(visitors);
+    await generateOrFetchFixedVisitors({
+      model: Shop,
+      adminId,
+      type: 'shop'
+    });
+
+    const all = await DailyVisitors.find({ adminId, type: 'shop' }).sort({ date: -1 });
+
+    const filtered = all.map(entry => ({
+      date: entry.date,
+      visitors: searchFilter(search, entry.visitors)
+    }));
+
+    res.json({ results: filtered });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Error fetching shop visitors' });
   }
 };
-
