@@ -17,5 +17,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ANAGHA-A-04/Entrease.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ANAGHA-A-04/Entrease/issues"
+  },
+  "homepage": "https://github.com/ANAGHA-A-04/Entrease#readme",
   "description": ""
 }
