@@ -5,6 +5,7 @@ const Admin = require('../models/admin');
 // USER SIGNUP
 exports.userSignup = async (req, res) => {
   const { username, email, password, confirmPassword } = req.body;
+  console.log('Signup request:', req.body);
   if (password !== confirmPassword)
     return res.status(400).json({ msg: 'Passwords do not match' });
 
