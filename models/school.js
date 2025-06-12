@@ -7,7 +7,7 @@ const schoolschema= new mongoose.Schema({
         enum:['male','female','other'],
         required:true
     },
-    std:{
+    "class":{
         type:String,
         required:true
     },
