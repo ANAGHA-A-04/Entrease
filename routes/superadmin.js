@@ -8,7 +8,7 @@ const {
   getAllSchoolAdmins,
   getAllShopAdmins,
   getAllVisitorsByType
-} = require('../controllers/superadminControllerr');
+} = require('../controllers/superadminController');
 
 // Counts
 router.get('/count/hospital', getHospitalCount);
