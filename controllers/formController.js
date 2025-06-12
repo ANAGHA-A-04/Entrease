@@ -24,7 +24,7 @@ exports.submitschool=async(req,res)=>{
         res.status(201).json({msg:'school visitor recorded',visit});
     }catch(err){
         console.error(err);
-        res.status(500).json({msg:'failed to record school visitor'});
+        res.status(500).json({err,msg:'failed to record school visitor'});
     }
 };
 
