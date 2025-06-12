@@ -17,9 +17,9 @@ exports.submithospital=async(req,res)=>{
     
 };
 exports.submitschool=async(req,res)=>{
-    const{ name,DOB,gender,class:cls,address,guardian,relation,phone}= req.body;
+    const{ name,DOB,gender,std,address,guardian,relation,phone}= req.body;
     try{
-        const visit = new schoolvisitor({name,DOB,gender,class:cls,address,guardian,relation,phone});
+        const visit = new schoolvisitor({name,DOB,gender,std,address,guardian,relation,phone});
         await visit.save();
         res.status(201).json({msg:'school visitor recorded',visit});
     }catch(err){
