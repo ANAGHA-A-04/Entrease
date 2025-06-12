@@ -7,7 +7,7 @@ const schoolschema= new mongoose.Schema({
         enum:['male','female','other'],
         required:true
     },
-    cls:{
+    std:{
         type:String,
         required:true
     },
@@ -29,4 +29,4 @@ const schoolschema= new mongoose.Schema({
         match:[/^[0-9]{10}$/,'phone number must be 10 digits']
     },
 }, { timestamps: true });
-module.exports=mongoose.model("student",schoolschema,"school");
+module.exports=mongoose.model("school",schoolschema,"school");
