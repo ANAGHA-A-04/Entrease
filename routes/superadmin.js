@@ -1,14 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const superAdminController = require('../controllers/superadminController');
+const {
+  getHospitalCount,
+  getSchoolCount,
+  getShopCount,
+  getAllHospitalAdmins,
+  getAllSchoolAdmins,
+  getAllShopAdmins,
+  getAllVisitorsByType
+} = require('../controllers/superadminControllerr');
 
-//  Get all admins of a specific type (hospital/school/shop)
-router.get('/admins/:type', superAdminController.getAdminsByType);
+// Counts
+router.get('/count/hospital', getHospitalCount);
+router.get('/count/school', getSchoolCount);
+router.get('/count/shop', getShopCount);
 
-//  Get today's visitors for a specific admin
-router.get('/daily-visitors/:type/:adminId', superAdminController.getAdminVisitorsByDay);
+// Admins
+router.get('/admins/hospital', getAllHospitalAdmins);
+router.get('/admins/school', getAllSchoolAdmins);
+router.get('/admins/shop', getAllShopAdmins);
 
-//  Get total counts of all types of administrations
-router.get('/admin-counts', superAdminController.getAdminCounts);
+// Visitors
+router.get('/visitors/all/:type', getAllVisitorsByType); // type: hospital, school, shop
 
 module.exports = router;
