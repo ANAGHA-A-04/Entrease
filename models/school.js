@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 const schoolschema= new mongoose.Schema({
     name:{type:String,required:true},
-    DOB:{type:Date,required:true},
+    DOB:{type:String,required:true},
     gender:{
         type:String,
         enum:['male','female','other'],
