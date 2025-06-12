@@ -1,36 +1,66 @@
 const hospital = require('../models/hospital');
-const HospitalVisitor=require('../models/hospital');
 const school = require('../models/school');
-const SchoolVistor = require('../models/school');
 const shop = require('../models/shop');
-const ShopVisitor = require('../models/shop');
-//count of hospital visitors
-exports.getHospitalCount=async (req,res)=>{
-    try{
-        const count =await hospital.countDocuments();
-        res.json({administration:'hospital',count});
-    }catch(err){
-        console.error(err);
-        res.status(500).json({msg:'Error getting hospital visitor count'});
-    }
+const DailyVisitors = require('../models/dailyVisiter');
+
+// 1. Get all admins of a specific type (hospital/school/shop)
+exports.getAdminsByType = async (req, res) => {
+  const { type } = req.params;
+
+  const modelMap = {
+    hospital,
+    school,
+    shop
+  };
+
+  const Model = modelMap[type];
+  if (!Model) return res.status(400).json({ msg: 'Invalid type' });
+
+  try {
+    const admins = await Model.find({}, '_id administrationName');
+    res.json(admins);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Error fetching admins' });
+  }
 };
-//count of school visitors
-exports.getSchoolCount=async(req,res)=>{
-    try{
-        const count =await school.countDocuments();
-        res.json({administration:'school',count});
-    }catch(err){
-        console.error(err);
-        res.status(500).json({msg:'Error getting school visitor count'});
+
+//  2. Get today's visitors of a specific admin
+exports.getAdminVisitorsByDay = async (req, res) => {
+  const { type, adminId } = req.params;
+  const date = new Date().toISOString().split('T')[0]; // today's date
+
+  try {
+    const record = await DailyVisitors.findOne({ type, adminId, date });
+
+    if (!record) {
+      return res.json({ count: 0, visitors: [] });
     }
+
+    res.json({
+      count: record.visitors.length,
+      visitors: record.visitors
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Error fetching daily visitors' });
+  }
 };
-//count of shop visitors
-exports.getShopCount = async(req,res)=>{
-    try{
-        const count=await shop.countDocuments();
-        res.json({administration:'shop',count});
-    }catch(err){
-        console.error(err);
-        res.status(500).json({msg:'Error getting shop visitor count'});
-    }
+
+//  3. Get total number of hospitals, schools, and shops
+exports.getAdminCounts = async (req, res) => {
+  try {
+    const hospitalCount = await hospital.countDocuments();
+    const schoolCount = await school.countDocuments();
+    const shopCount = await shop.countDocuments();
+
+    res.json({
+      hospital: hospitalCount,
+      school: schoolCount,
+      shop: shopCount
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Error getting admin counts' });
+  }
 };
