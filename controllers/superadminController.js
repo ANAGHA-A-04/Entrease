@@ -4,7 +4,7 @@ const DailyVisitor = require('../models/dailyVisiter');
 // Get count of admins by type
 exports.getHospitalCount = async (req, res) => {
   try {
-    const count = await Admin.countDocuments({ type: 'hospital' });
+    const count = await Admin.countDocuments({ administration: 'hospital' });
     res.json({ administration: 'hospital', count });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -13,7 +13,7 @@ exports.getHospitalCount = async (req, res) => {
 
 exports.getSchoolCount = async (req, res) => {
   try {
-    const count = await Admin.countDocuments({ type: 'school' });
+    const count = await Admin.countDocuments({ administartion: 'school' });
     res.json({ administration: 'school', count });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -22,7 +22,7 @@ exports.getSchoolCount = async (req, res) => {
 
 exports.getShopCount = async (req, res) => {
   try {
-    const count = await Admin.countDocuments({ type: 'shop' });
+    const count = await Admin.countDocuments({ administration: 'shop' });
     res.json({ administration: 'shop', count });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -32,7 +32,7 @@ exports.getShopCount = async (req, res) => {
 // Get all admins by type
 exports.getAllHospitalAdmins = async (req, res) => {
   try {
-    const admins = await Admin.find({ type: 'hospital' });
+    const admins = await Admin.find({ administartion: 'hospital' });
     res.json(admins);
   } catch (err) {
     res.status(500).json({ error: err.message });

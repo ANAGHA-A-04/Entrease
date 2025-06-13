@@ -6,7 +6,7 @@ const dailyVisitorsSchema = new mongoose.Schema({
     required: true
   },
   date: {
-    type: String, // Format: "YYYY-MM-DD"
+    type: Date, // Format: "YYYY-MM-DD"
     required: true
   },
   type: {
